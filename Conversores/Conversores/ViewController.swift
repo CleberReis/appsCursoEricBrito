@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var btUnit2: UIButton!
     @IBOutlet weak var lbResult: UILabel!
     @IBOutlet weak var lbResultUnit: UILabel!
+    @IBOutlet weak var lbUnit: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,14 +24,96 @@ class ViewController: UIViewController {
     }
     
     //MARK: - Methods
+    func calcTemperature() {
+        guard let temparatue = Double(tfValue.text!) else {return}
+        if btUnit1.alpha == 1.0 {
+            lbResultUnit.text = "Farenheint"
+            lbResult.text = "\(temparatue * 1.8 + 32.0)"
+        } else {
+            lbResultUnit.text = "Celsius"
+            lbResult.text = "\((temparatue - 32.0) / 1.8)"
+        }
+    }
+    
+    func calcWeight() {
+        guard let weight = Double(tfValue.text!) else {return}
+        if btUnit1.alpha == 1.0 {
+            lbResultUnit.text = "Libra"
+            lbResult.text = "\(weight / 2.2046)"
+        } else {
+            lbResultUnit.text = "Kilograma"
+            lbResult.text = "\(weight * 2.2046)"
+        }
+    }
+    
+    func calcCurrency() {
+        guard let currency = Double(tfValue.text!) else {return}
+        if btUnit1.alpha == 1.0 {
+            lbResultUnit.text = "Dólar"
+            lbResult.text = "\(currency / 5.40)"
+        } else {
+            lbResultUnit.text = "Real"
+            lbResult.text = "\(currency * 5.40)"
+        }
+    }
+    
+    func calcDistance() {
+        guard let distance = Double(tfValue.text!) else {return}
+        if btUnit1.alpha == 1.0 {
+            lbResultUnit.text = "Kilômetro"
+            lbResult.text = "\(distance / 1000)"
+        } else {
+            lbResultUnit.text = "Metros"
+            lbResult.text = "\(distance * 1000)"
+        }
+    }
 
     //MARK: - IBAction
     @IBAction func showNext(_ sender: UIButton) {
-        
+        switch lbUnit.text! {
+            case "Temperatura":
+                lbUnit.text = "Peso"
+                btUnit1.setTitle("Kilograma", for: .normal)
+                btUnit2.setTitle("Libra", for: .normal)
+            case "Peso":
+                lbUnit.text = "Moeda"
+                btUnit1.setTitle("Real", for: .normal)
+                btUnit2.setTitle("Dólar", for: .normal)
+            case "Moeda":
+                lbUnit.text = "Distância"
+                btUnit1.setTitle("Metro", for: .normal)
+                btUnit2.setTitle("Kilômetro", for: .normal)
+            default:
+                lbUnit.text = "Temperatura"
+                btUnit1.setTitle("Celsius", for: .normal)
+                btUnit2.setTitle("Farenheint", for: .normal)
+        }
+        convert(nil)
     }
     
-    @IBAction func convert(_ sender: UIButton) {
+    @IBAction func convert(_ sender: UIButton?) {
+        if let sender = sender {
+            if sender == btUnit1 {
+                btUnit2.alpha = 0.5
+            } else {
+                btUnit1.alpha = 0.5
+            }
+            sender.alpha = 1.0
+        }
         
+        switch lbUnit.text! {
+            case "Temperatura":
+                calcTemperature()
+            case "Peso":
+                calcWeight()
+            case "Moeda":
+                calcCurrency()
+            default:
+                calcDistance()
+        }
+        view.endEditing(true)
+        let result = Double(lbResult.text!)!
+        lbResult.text = String(format: "%.2f", result)
     }
 }
 
