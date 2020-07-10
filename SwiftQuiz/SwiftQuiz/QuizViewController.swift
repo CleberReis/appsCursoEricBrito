@@ -14,12 +14,14 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var lbQuestion: UILabel!
     @IBOutlet var btAnswers: [UIButton]!
     
+    let quizManager = QuizManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
+    
+    
     
     @IBAction func selectAnswer(_ sender: UIButton) {
     }
